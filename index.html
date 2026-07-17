@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sarkar Setu — One Place for Every Government Service</title>
+<meta name="description" content="Find official Indian Government websites and services quickly — organised by category and by state." />
+<style>
+  :root{
+    --navy:#152549; --navy-deep:#0D1830; --navy-soft:#334876;
+    --ink:#1B2333; --sub:#5B6478; --line:#E4E7EE; --bg:#F6F7FA; --card:#FFFFFF;
+    --saffron:#FF9933; --green:#128807; --focus:#2F62F0;
+    --chip-blue-bg:#EEF1F8; --chip-orange-bg:#FFF3E6; --chip-green-bg:#E9F5E7;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  button{font-family:inherit; cursor:pointer;}
+  ul{list-style:none; margin:0; padding:0;}
+  img,svg{display:block;}
+  .sr-only{position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;}
+  .skip-link{position:absolute; left:16px; top:-60px; z-index:100; background:#fff; padding:10px 16px; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,.15); font-size:14px; font-weight:600; transition:top .15s;}
+  .skip-link:focus{top:16px;}
+  :focus-visible{outline:2px solid var(--focus); outline-offset:2px;}
+
+  .tri-line{height:3px; width:100%; background:linear-gradient(90deg, var(--saffron) 0%, var(--saffron) 33%, #ffffff 33%, #ffffff 66%, var(--green) 66%, var(--green) 100%);}
+
+  .wrap{max-width:1180px; margin:0 auto; padding:0 20px;}
+
+  /* nav */
+  header.site-header{position:sticky; top:0; z-index:50; background:#fff; border-bottom:1px solid var(--line);}
+  .nav-row{display:flex; align-items:center; justify-content:space-between; gap:16px; height:68px;}
+  .brand{display:flex; align-items:center; gap:10px; background:none; border:0; padding:4px; border-radius:8px;}
+  .brand-badge{width:36px; height:36px; border-radius:999px; background:var(--navy); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; flex-shrink:0;}
+  .brand-text{text-align:left; line-height:1.2;}
+  .brand-text .t1{display:block; font-size:15px; font-weight:700; color:var(--ink);}
+  .brand-text .t2{display:block; font-size:11px; color:var(--sub);}
+  nav.primary{display:flex; align-items:center; gap:2px;}
+  nav.primary button{background:none; border:0; padding:9px 12px; border-radius:8px; font-size:14px; font-weight:600; color:var(--ink);}
+  nav.primary button:hover{background:#F2F3F7;}
+  .nav-search{display:flex; align-items:center; gap:8px; border:1px solid var(--line); border-radius:10px; padding:8px 12px; max-width:230px; flex:1;}
+  .nav-search input{border:0; outline:0; background:none; width:100%; font-size:14px; color:var(--ink);}
+  .nav-search svg{flex-shrink:0; color:var(--sub);}
+  .burger{display:none; background:none; border:0; padding:8px; border-radius:8px;}
+  .mobile-nav{display:none; flex-direction:column; gap:2px; padding:10px 0 16px; border-top:1px solid var(--line);}
+  .mobile-nav button{background:none; border:0; text-align:left; padding:11px 8px; border-radius:8px; font-size:14px; font-weight:600; color:var(--ink);}
+  .mobile-nav button:hover{background:#F2F3F7;}
+  .mobile-nav.open{display:flex;}
+
+  @media (max-width:920px){
+    nav.primary, .nav-search{display:none;}
+    .burger{display:flex;}
+  }
+
+  /* hero */
+  .hero{background:var(--bg); border-bottom:1px solid var(--line); padding:64px 20px 76px; text-align:center;}
+  .hero-inner{max-width:760px; margin:0 auto;}
+  .eyebrow{display:inline-flex; align-items:center; gap:6px; background:var(--chip-blue-bg); color:var(--navy); font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; padding:6px 14px; border-radius:999px; margin-bottom:18px;}
+  h1.hero-title{font-size:44px; line-height:1.12; font-weight:800; margin:0 0 16px; color:var(--ink);}
+  .hero-sub{font-size:18px; color:var(--sub); margin:0 auto 34px; max-width:560px;}
+  @media (max-width:640px){ h1.hero-title{font-size:32px;} .hero-sub{font-size:16px;} }
+
+  .search-shell{position:relative; max-width:640px; margin:0 auto; text-align:left;}
+  .search-box{display:flex; align-items:center; gap:12px; background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px 18px; box-shadow:0 1px 2px rgba(16,24,40,.05);}
+  .search-box:focus-within{box-shadow:0 0 0 3px rgba(47,98,240,.25);}
+  .search-box svg{flex-shrink:0; color:var(--sub);}
+  .search-box input{border:0; outline:0; width:100%; font-size:16px; background:none; color:var(--ink);}
+  .search-box input::placeholder{color:#98A2B3;}
+
+  .search-results{position:absolute; z-index:40; margin-top:8px; width:100%; background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:0 12px 32px rgba(16,24,40,.12); overflow:hidden; max-height:340px; overflow-y:auto; display:none;}
+  .search-results.show{display:block;}
+  .sr-empty{padding:18px; font-size:14px; color:var(--sub);}
+  .sr-item{width:100%; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 16px; background:none; border:0; text-align:left; border-bottom:1px solid var(--line);}
+  .sr-item:last-child{border-bottom:0;}
+  .sr-item:hover, .sr-item:focus-visible{background:#F8F9FB;}
+  .sr-item .name{display:block; font-size:14px; font-weight:600; color:var(--ink);}
+  .sr-item .sub{display:block; font-size:12px; color:var(--sub); margin-top:1px;}
+  .sr-badge{flex-shrink:0; font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px;}
+  .sr-badge.service{background:var(--chip-blue-bg); color:var(--navy);}
+  .sr-badge.state{background:var(--chip-orange-bg); color:#B5570A;}
+
+  .chips{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; max-width:620px; margin:28px auto 0;}
+  .chip{background:#fff; border:1px solid var(--line); border-radius:999px; padding:8px 16px; font-size:13.5px; font-weight:600; color:var(--ink);}
+  .chip:hover{background:#F8F9FB;}
+
+  .browse-states-link{display:inline-flex; align-items:center; gap:6px; margin-top:30px; background:none; border:0; font-size:14px; font-weight:700; color:var(--navy);}
+  .browse-states-link:hover{text-decoration:underline; text-underline-offset:4px;}
+
+  /* section headers */
+  .section{padding:56px 20px;}
+  .section-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:30px; flex-wrap:wrap;}
+  .section-head h2{font-size:28px; font-weight:800; margin:0 0 6px;}
+  .section-head p{margin:0; color:var(--sub); font-size:15px;}
+  .section.alt{background:var(--bg); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+
+  /* category cards */
+  .cat-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  @media (max-width:900px){ .cat-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:620px){ .cat-grid{grid-template-columns:1fr;} }
+
+  .cat-card{background:#fff; border:1px solid var(--line); border-radius:16px; box-shadow:0 1px 2px rgba(16,24,40,.04); transition:box-shadow .15s;}
+  .cat-card:hover{box-shadow:0 6px 20px rgba(16,24,40,.08);}
+  .cat-head{width:100%; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; background:none; border:0; padding:20px; text-align:left; border-radius:16px;}
+  .cat-head-left{display:flex; align-items:flex-start; gap:14px;}
+  .cat-icon{width:44px; height:44px; border-radius:12px; background:var(--chip-blue-bg); color:var(--navy); display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .cat-title{font-size:16px; font-weight:700; margin:0 0 3px;}
+  .cat-desc{font-size:13.5px; color:var(--sub); margin:0;}
+  .chev{transition:transform .18s; color:var(--sub); flex-shrink:0; margin-top:6px;}
+  .cat-card.open .chev{transform:rotate(180deg);}
+  .cat-body{display:none; border-top:1px solid var(--line); padding:16px 20px 20px;}
+  .cat-card.open .cat-body{display:block;}
+  .svc-row{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 2px;}
+  .svc-name{font-size:14px; font-weight:600; margin:0;}
+  .svc-site{font-size:12px; color:var(--sub); margin:1px 0 0;}
+  .svc-btn{flex-shrink:0; display:inline-flex; align-items:center; gap:5px; border:1px solid var(--line); border-radius:999px; padding:7px 13px; font-size:12px; font-weight:700; color:var(--navy); background:#fff; white-space:nowrap;}
+  .svc-btn:hover{background:#F8F9FB;}
+
+  /* quick access */
+  .qa-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+  @media (max-width:900px){ .qa-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:560px){ .qa-grid{grid-template-columns:1fr;} }
+  .qa-card{display:flex; align-items:center; justify-content:space-between; gap:12px; background:#fff; border:1px solid var(--line); border-radius:14px; padding:17px 20px; font-size:14.5px; font-weight:700; box-shadow:0 1px 2px rgba(16,24,40,.04); transition:transform .15s, box-shadow .15s;}
+  .qa-card:hover{box-shadow:0 8px 22px rgba(16,24,40,.1); transform:translateY(-2px);}
+  .qa-card svg{color:var(--navy); flex-shrink:0;}
+
+  /* state promo */
+  .promo{border:1px solid var(--line); border-radius:18px; padding:34px; background:#F8FAF6; display:grid; grid-template-columns:1fr auto; gap:20px; align-items:center;}
+  @media (max-width:700px){ .promo{grid-template-columns:1fr;} }
+  .promo h2{font-size:22px; font-weight:800; margin:0 0 8px;}
+  .promo p{margin:0; color:var(--sub); font-size:14.5px; max-width:520px;}
+  .promo-badge{display:inline-flex; align-items:center; gap:7px; background:var(--chip-green-bg); color:var(--green); font-weight:700; font-size:12.5px; padding:7px 14px; border-radius:999px; white-space:nowrap;}
+
+  /* breadcrumbs */
+  .crumbs{display:flex; align-items:center; gap:6px; font-size:13.5px; color:var(--sub); flex-wrap:wrap;}
+  .crumbs button{background:none; border:0; color:var(--sub); font-size:13.5px; padding:2px;}
+  .crumbs button:hover{text-decoration:underline;}
+  .crumbs .current{color:var(--ink); font-weight:700;}
+
+  /* states view */
+  #states-view{display:none;}
+  #states-view.show{display:block;}
+  #home-view.hide{display:none;}
+  .states-title{font-size:28px; font-weight:800; margin:18px 0 8px;}
+  .states-sub{color:var(--sub); font-size:15px; max-width:640px; margin:0 0 24px;}
+  .state-search{display:flex; align-items:center; gap:8px; border:1px solid var(--line); background:#fff; border-radius:10px; padding:10px 14px; max-width:340px; margin-bottom:26px;}
+  .state-search input{border:0; outline:0; background:none; width:100%; font-size:14px;}
+  .state-search svg{color:var(--sub); flex-shrink:0;}
+
+  .state-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:16px;}
+  @media (max-width:980px){ .state-grid{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:620px){ .state-grid{grid-template-columns:1fr;} }
+  .state-card{background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px; box-shadow:0 1px 2px rgba(16,24,40,.04);}
+  .state-card:hover{box-shadow:0 6px 20px rgba(16,24,40,.08);}
+  .state-head{display:flex; align-items:center; justify-content:space-between; gap:10px; width:100%; background:none; border:0; padding:0; text-align:left;}
+  .state-head-left{display:flex; align-items:center; gap:12px;}
+  .state-avatar{width:38px; height:38px; border-radius:999px; background:var(--navy-soft); color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+  .state-name{font-size:15px; font-weight:700;}
+  .state-body{display:none; margin-top:16px; padding-top:14px; border-top:1px solid var(--line); grid-template-columns:1fr 1fr; gap:6px 16px;}
+  .state-card.open .state-body{display:grid;}
+  @media (max-width:420px){ .state-body{grid-template-columns:1fr;} }
+  .state-body a{display:flex; align-items:center; gap:5px; font-size:13.5px; color:var(--navy); padding:4px 0;}
+  .state-body a:hover{text-decoration:underline; text-underline-offset:2px;}
+  .no-states{grid-column:1/-1; text-align:center; padding:40px 0; color:var(--sub); font-size:14px;}
+
+  /* footer */
+  footer{background:var(--navy-deep); color:#fff;}
+  .foot-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:30px; padding:56px 20px 40px; max-width:1180px; margin:0 auto;}
+  @media (max-width:700px){ .foot-grid{grid-template-columns:repeat(2,1fr);} }
+  .foot-col h3{font-size:14px; font-weight:700; margin:0 0 14px;}
+  .foot-col ul li{margin-bottom:10px;}
+  .foot-col a{font-size:13.5px; color:#C9CEDA;}
+  .foot-col a:hover{color:#fff; text-decoration:underline; text-underline-offset:2px;}
+  .foot-bottom{border-top:1px solid rgba(255,255,255,.12); max-width:1180px; margin:0 auto; padding:26px 20px; display:flex; flex-wrap:wrap; gap:14px; align-items:center; justify-content:space-between;}
+  .foot-phone{display:flex; align-items:center; gap:8px; font-size:13.5px; color:#C9CEDA;}
+  .foot-note{font-size:12px; color:#8B93A7; max-width:520px;}
+
+  .icon{width:1em; height:1em;}
+</style>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<header class="site-header">
+  <div class="tri-line"></div>
+  <div class="wrap">
+    <div class="nav-row">
+      <button class="brand" onclick="showView('home')" aria-label="Go to homepage">
+        <span class="brand-badge">IN</span>
+        <span class="brand-text">
+          <span class="t1">Sarkar Setu</span>
+          <span class="t2">Government of India Services</span>
+        </span>
+      </button>
+
+      <nav class="primary" aria-label="Primary">
+        <button onclick="showView('home')">Central Government</button>
+        <button onclick="showView('states')">State Services</button>
+        <button onclick="showView('home')">Schemes</button>
+        <button onclick="showView('home')">Documents</button>
+        <button onclick="showView('home')">Contact</button>
+      </nav>
+
+      <div class="nav-search">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="navSearchInput" type="text" placeholder="Search services..." aria-label="Search government services" oninput="onHeroSearch(this.value)" onfocus="showView('home')">
+      </div>
+
+      <button class="burger" id="burgerBtn" aria-label="Open menu" aria-expanded="false" onclick="toggleMobileNav()">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      </button>
+    </div>
+
+    <nav class="mobile-nav" id="mobileNav" aria-label="Primary mobile">
+      <button onclick="showView('home'); toggleMobileNav()">Central Government</button>
+      <button onclick="showView('states'); toggleMobileNav()">State Services</button>
+      <button onclick="showView('home'); toggleMobileNav()">Schemes</button>
+      <button onclick="showView('home'); toggleMobileNav()">Documents</button>
+      <button onclick="showView('home'); toggleMobileNav()">Contact</button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- HOME VIEW -->
+  <div id="home-view">
+
+    <section class="hero">
+      <div class="hero-inner">
+        <span class="eyebrow">A single doorway to Indian government services</span>
+        <h1 class="hero-title">One place for every government service</h1>
+        <p class="hero-sub">Find official Indian Government websites quickly and easily — no guessing which ministry runs what.</p>
+
+        <div class="search-shell">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input id="heroSearchInput" type="text" placeholder="Search passport, PAN card, Aadhaar, driving licence, GST, visa..." aria-label="Search government services" oninput="onHeroSearch(this.value)">
+          </div>
+          <div class="search-results" id="searchResults" role="listbox"></div>
+        </div>
+
+        <div class="chips" id="popularChips"></div>
+
+        <button class="browse-states-link" onclick="showView('states')">
+          Browse services by state or union territory
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2>Browse by category</h2>
+            <p>Every service, grouped the way citizens think about them.</p>
+          </div>
+        </div>
+        <div class="cat-grid" id="categoryGrid"></div>
+      </div>
+    </section>
+
+    <section class="section alt">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <h2>Quick access</h2>
+            <p>Jump straight to the most-used tasks.</p>
+          </div>
+        </div>
+        <div class="qa-grid" id="quickAccessGrid"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="promo">
+          <div>
+            <h2>Looking for a state-specific service?</h2>
+            <p>Land records, property registration and local utilities are managed by your state or union territory government. Find yours in one place.</p>
+          </div>
+          <span class="promo-badge">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/></svg>
+            28 states · 8 union territories
+          </span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- STATES VIEW -->
+  <div id="states-view">
+    <div class="wrap" style="padding:36px 20px 64px;">
+      <div class="crumbs">
+        <button onclick="showView('home')">Home</button>
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="9 6 15 12 9 18"/></svg>
+        <span class="current">State Services</span>
+      </div>
+      <h1 class="states-title">State &amp; union territory services</h1>
+      <p class="states-sub">Land records, local registration, utilities and more — organised by state, linking out to each official portal. Where a specific department page isn't independently verifiable, the link opens that state's page on India's Integrated Government Online Directory (IGOD), a directory run by the National Informatics Centre.</p>
+
+      <div class="state-search">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="stateSearchInput" type="text" placeholder="Search states or union territories..." aria-label="Search states" oninput="renderStates(this.value)">
+      </div>
+
+      <div class="state-grid" id="stateGrid"></div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="foot-grid">
+    <div class="foot-col">
+      <h3>Central Government</h3>
+      <ul>
+        <li><a href="https://www.india.gov.in/ministries-and-departments" target="_blank" rel="noreferrer">Ministries</a></li>
+        <li><a href="https://www.india.gov.in/ministries-and-departments" target="_blank" rel="noreferrer">Departments</a></li>
+        <li><a href="https://www.myscheme.gov.in" target="_blank" rel="noreferrer">Schemes</a></li>
+        <li><a href="https://dpe.gov.in" target="_blank" rel="noreferrer">Public Sector Units</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h3>State Governments</h3>
+      <ul>
+        <li><a href="#" onclick="showView('states'); return false;">All States</a></li>
+        <li><a href="#" onclick="showView('states'); return false;">Union Territories</a></li>
+        <li><a href="https://igod.gov.in/sg/states" target="_blank" rel="noreferrer">Local Bodies (IGOD)</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h3>Citizen Services</h3>
+      <ul>
+        <li><a href="https://www.digilocker.gov.in" target="_blank" rel="noreferrer">DigiLocker</a></li>
+        <li><a href="https://crsorgi.gov.in" target="_blank" rel="noreferrer">Certificates</a></li>
+        <li><a href="https://pgportal.gov.in" target="_blank" rel="noreferrer">Grievances (CPGRAMS)</a></li>
+        <li><a href="https://services.india.gov.in" target="_blank" rel="noreferrer">National Services Portal</a></li>
+      </ul>
+    </div>
+    <div class="foot-col">
+      <h3>Help</h3>
+      <ul>
+        <li><a href="https://pgportal.gov.in" target="_blank" rel="noreferrer">Feedback</a></li>
+        <li><a href="https://guidelines.india.gov.in" target="_blank" rel="noreferrer">Accessibility</a></li>
+        <li><a href="https://www.india.gov.in/privacy-policy" target="_blank" rel="noreferrer">Privacy</a></li>
+        <li><a href="https://www.india.gov.in/terms-and-conditions" target="_blank" rel="noreferrer">Terms of Use</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <div class="foot-phone">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92z"/></svg>
+      National Helpline: 1800-11-1234 (toll-free)
+    </div>
+    <p class="foot-note">This is an unofficial demonstration portal that links to official Government of India, state government and IGOD (National Informatics Centre) websites. It does not process transactions itself.</p>
+  </div>
+</footer>
+
+<script>
+
+/*  ICONS                                                                  */
+
+const ICONS = {
+  fingerprint:'<path d="M12 11c0 3.5-1 6-2 8"/><path d="M8 15c.3-1 .5-2.5.5-4a3.5 3.5 0 1 1 7 0c0 .8-.1 1.7-.3 2.6"/><path d="M4.5 12.5C4.7 8 8 5 12 5s7.3 3 7.5 7.5"/><path d="M2.5 10.5C3 6 7 3 12 3s9 3 9.5 7.5"/><path d="M16 17c-.7-1.5-1-3-1-6"/>',
+  landmark:'<line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/>',
+  plane:'<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-1 0-1.3.4l-.7.7c-.4.4-.3 1 .2 1.3l5.3 3-2 2H3l-1 1 3 2 2 3 1-1v-3l2-2 3 5.3c.3.5.9.6 1.3.2l.7-.7c.4-.3.5-.8.4-1.3z"/',
+  car:'<path d="M5 17h14M5 17a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm14 0a2 2 0 1 0 4 0 2 2 0 0 0-4 0zM3 17V9l2-5h14l2 5v8"/><path d="M3 12h18"/>',
+  heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/><line x1="8.5" y1="12" x2="15.5" y2="12"/><line x1="12" y1="8.5" x2="12" y2="15.5"/>',
+  cap:'<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/>',
+  briefcase:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',
+  building:'<rect x="4" y="2" width="16" height="20" rx="1"/><line x1="9" y1="6" x2="9" y2="6"/><line x1="15" y1="6" x2="15" y2="6"/><line x1="9" y1="10" x2="9" y2="10"/><line x1="15" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="9" y2="14"/><line x1="15" y1="14" x2="15" y2="14"/><line x1="9" y1="18" x2="15" y2="18"/>',
+  wheat:'<path d="M12 22V12"/><path d="M9 8a3 3 0 1 1 6 0c0 1.5-1.5 3-3 3s-3 1.5-3 3a3 3 0 1 0 6 0"/><path d="M6 5a3 3 0 1 1 5 2"/><path d="M18 5a3 3 0 1 0-5 2"/>',
+  home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/>',
+  scale:'<line x1="12" y1="3" x2="12" y2="21"/><path d="M5 8l-3 6a4 4 0 0 0 6 0z"/><path d="M19 8l-3 6a4 4 0 0 0 6 0z"/><path d="M5 8h14"/><path d="M9 21h6"/>',
+  zap:'<polygon points="13 2 3 14 11 14 11 22 21 10 13 10 13 2"/>',
+  chevronDown:'<polyline points="6 9 12 15 18 9"/>',
+  chevronRight:'<polyline points="9 6 15 12 9 18"/>',
+  externalLink:'<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>',
+  arrowRight:'<line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>',
+};
+function svg(name, size){ return `<svg class="icon" viewBox="0 0 24 24" width="${size||18}" height="${size||18}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[name]}</svg>`; }
+
+/*  DATA                                                                   */
+
+const CATEGORIES = [
+  { key:"identity", title:"Identity", icon:"fingerprint", desc:"Aadhaar, PAN, Voter ID and civil records",
+    items:[
+      {name:"Aadhaar", site:"UIDAI", url:"https://uidai.gov.in"},
+      {name:"PAN Card", site:"Income Tax e-Filing", url:"https://www.incometax.gov.in"},
+      {name:"Voter ID", site:"National Voter Services Portal", url:"https://voters.eci.gov.in"},
+      {name:"Birth Certificate", site:"CRS – Registrar General of India", url:"https://crsorgi.gov.in"},
+      {name:"Death Certificate", site:"CRS – Registrar General of India", url:"https://crsorgi.gov.in"},
+    ]},
+  { key:"tax", title:"Tax & Finance", icon:"landmark", desc:"Income tax, GST, EPFO and pensions",
+    items:[
+      {name:"Income Tax", site:"Income Tax e-Filing", url:"https://www.incometax.gov.in"},
+      {name:"GST", site:"GST Portal", url:"https://www.gst.gov.in"},
+      {name:"EPFO", site:"Employees' Provident Fund Organisation", url:"https://www.epfindia.gov.in"},
+      {name:"Pension", site:"Jeevan Pramaan", url:"https://jeevanpramaan.gov.in"},
+      {name:"Digital Payments", site:"NPCI / BHIM", url:"https://www.npci.org.in"},
+    ]},
+  { key:"travel", title:"Travel", icon:"plane", desc:"Passport, visa, immigration and customs",
+    items:[
+      {name:"Passport", site:"Passport Seva", url:"https://www.passportindia.gov.in"},
+      {name:"Visa", site:"e-Visa India", url:"https://indianvisaonline.gov.in"},
+      {name:"Immigration", site:"Bureau of Immigration", url:"https://boi.gov.in"},
+      {name:"OCI", site:"Overseas Citizen of India", url:"https://ociservices.gov.in"},
+      {name:"Customs", site:"Indian Customs (ICEGATE)", url:"https://www.icegate.gov.in"},
+    ]},
+  { key:"transport", title:"Transport", icon:"car", desc:"Licences, vehicle registration and challans",
+    items:[
+      {name:"Driving Licence", site:"Parivahan", url:"https://parivahan.gov.in"},
+      {name:"Vehicle Registration", site:"Parivahan", url:"https://parivahan.gov.in"},
+      {name:"FASTag", site:"NETC FASTag", url:"https://www.ihmcl.co.in"},
+      {name:"Traffic Challans", site:"eChallan", url:"https://echallan.parivahan.gov.in"},
+      {name:"National Permit", site:"Parivahan", url:"https://parivahan.gov.in"},
+    ]},
+  { key:"health", title:"Health", icon:"heart", desc:"Health ID, insurance and vaccination records",
+    items:[
+      {name:"ABHA", site:"Ayushman Bharat Digital Mission", url:"https://abha.abdm.gov.in"},
+      {name:"Ayushman Bharat", site:"PM-JAY", url:"https://pmjay.gov.in"},
+      {name:"Vaccination", site:"Co-WIN", url:"https://www.cowin.gov.in"},
+      {name:"Blood Banks", site:"e-Rakt Kosh", url:"https://eraktkosh.mohfw.gov.in"},
+    ]},
+  { key:"education", title:"Education", icon:"cap", desc:"Scholarships, boards and academic records",
+    items:[
+      {name:"Scholarships", site:"National Scholarship Portal", url:"https://scholarships.gov.in"},
+      {name:"UGC", site:"University Grants Commission", url:"https://www.ugc.gov.in"},
+      {name:"CBSE", site:"Central Board of Secondary Education", url:"https://www.cbse.gov.in"},
+      {name:"DigiLocker", site:"DigiLocker", url:"https://www.digilocker.gov.in"},
+      {name:"Academic Records", site:"Academic Bank of Credits", url:"https://www.abc.gov.in"},
+    ]},
+  { key:"employment", title:"Employment", icon:"briefcase", desc:"Jobs, skilling and apprenticeships",
+    items:[
+      {name:"National Career Service", site:"NCS Portal", url:"https://www.ncs.gov.in"},
+      {name:"Skill India", site:"Skill India Digital", url:"https://www.skillindiadigital.gov.in"},
+      {name:"Apprenticeships", site:"Apprenticeship India Portal", url:"https://apprenticeshipindia.gov.in"},
+      {name:"Government Jobs", site:"National Career Service", url:"https://www.ncs.gov.in"},
+    ]},
+  { key:"business", title:"Business", icon:"building", desc:"Company registration, MSME and trademarks",
+    items:[
+      {name:"Startup India", site:"Startup India", url:"https://www.startupindia.gov.in"},
+      {name:"MCA", site:"Ministry of Corporate Affairs", url:"https://www.mca.gov.in"},
+      {name:"MSME", site:"Udyam Registration", url:"https://udyamregistration.gov.in"},
+      {name:"GeM", site:"Government e-Marketplace", url:"https://gem.gov.in"},
+      {name:"Trademark & Patent", site:"Intellectual Property India", url:"https://ipindia.gov.in"},
+    ]},
+  { key:"agriculture", title:"Agriculture", icon:"wheat", desc:"Farmer schemes, insurance and markets",
+    items:[
+      {name:"PM-Kisan", site:"PM-Kisan Samman Nidhi", url:"https://pmkisan.gov.in"},
+      {name:"Soil Health", site:"Soil Health Card", url:"https://soilhealth.dac.gov.in"},
+      {name:"Crop Insurance", site:"PM Fasal Bima Yojana", url:"https://pmfby.gov.in"},
+      {name:"eNAM", site:"National Agriculture Market", url:"https://www.enam.gov.in"},
+    ]},
+  { key:"housing", title:"Housing", icon:"home", desc:"Housing schemes, land and property records",
+    items:[
+      {name:"PMAY", site:"Pradhan Mantri Awas Yojana", url:"https://pmaymis.gov.in"},
+      {name:"Land Records", site:"DILRMP", url:"https://dilrmp.gov.in"},
+      {name:"Property Registration", site:"State portals — see State Services", url:"#states"},
+    ]},
+  { key:"law", title:"Law & Justice", icon:"scale", desc:"Courts, police and legal services",
+    items:[
+      {name:"eCourts", site:"eCourts Services", url:"https://ecourts.gov.in"},
+      {name:"Legal Services", site:"National Legal Services Authority", url:"https://nalsa.gov.in"},
+      {name:"Police Services", site:"State portals — see State Services", url:"#states"},
+      {name:"FIR", site:"State portals — see State Services", url:"#states"},
+    ]},
+  { key:"utilities", title:"Utilities", icon:"zap", desc:"Electricity, water, LPG and broadband",
+    items:[
+      {name:"LPG", site:"MyLPG.in", url:"https://www.mylpg.in"},
+      {name:"Broadband", site:"BharatNet", url:"https://bbnl.nic.in"},
+      {name:"Electricity", site:"State portals — see State Services", url:"#states"},
+      {name:"Water", site:"State portals — see State Services", url:"#states"},
+    ]},
+];
+
+const POPULAR = ["Passport","Aadhaar","PAN","GST","Income Tax","Voter ID","Driving Licence","Birth Certificate","Visa","Railway","DigiLocker"];
+
+const QUICK_ACCESS = [
+  {label:"Apply for Passport", url:"https://www.passportindia.gov.in"},
+  {label:"Pay Income Tax", url:"https://www.incometax.gov.in"},
+  {label:"Apply for PAN", url:"https://www.incometax.gov.in"},
+  {label:"Book Passport Appointment", url:"https://www.passportindia.gov.in"},
+  {label:"Check Driving Licence", url:"https://parivahan.gov.in"},
+  {label:"Pay a Traffic Challan", url:"https://echallan.parivahan.gov.in"},
+  {label:"GST Portal", url:"https://www.gst.gov.in"},
+  {label:"EPFO", url:"https://www.epfindia.gov.in"},
+  {label:"DigiLocker", url:"https://www.digilocker.gov.in"},
+  {label:"ABHA Health ID", url:"https://abha.abdm.gov.in"},
+  {label:"Railway Booking", url:"https://www.irctc.co.in"},
+  {label:"Apply for Visa", url:"https://indianvisaonline.gov.in"},
+];
+
+const IGOD = code => `https://igod.gov.in/sg/${code}/categories`;
+
+const TOPIC_LABELS = ["Land Records","Property Registration","Driving Licence","Electricity Board","Water Board","Birth & Death Certificates","Revenue Department","State Police","Employment Exchange","State Tax / Commercial Taxes"];
+const STATE_DATA = {
+  "Andhra Pradesh": { code:"AP", portal:"https://ap.gov.in", overrides:{
+    "Driving Licence":"https://parivahan.gov.in", "Birth & Death Certificates":"https://aponline.gov.in", "State Police":"https://www.appolice.gov.in" }},
+  "Arunachal Pradesh": { code:"AR", portal:"https://arunachalpradesh.gov.in", overrides:{} },
+  "Assam": { code:"AS", portal:"https://assam.gov.in", overrides:{
+    "State Police":"https://assampolice.gov.in", "Land Records":"https://revenueassam.nic.in" }},
+  "Bihar": { code:"BR", portal:"https://state.bihar.gov.in", overrides:{
+    "Land Records":"https://biharbhumi.bihar.gov.in", "State Police":"https://biharpolice.bihar.gov.in" }},
+  "Chhattisgarh": { code:"CG", portal:"https://cg.gov.in", overrides:{
+    "Land Records":"https://bhuiyan.cg.nic.in", "State Police":"https://cgpolice.gov.in" }},
+  "Goa": { code:"GA", portal:"https://goa.gov.in", overrides:{ "State Police":"https://goapolice.gov.in" }},
+  "Gujarat": { code:"GJ", portal:"https://gujaratindia.gov.in", overrides:{
+    "Land Records":"https://anyror.gujarat.gov.in", "Property Registration":"https://garvi.gujarat.gov.in",
+    "Birth & Death Certificates":"https://digitalgujarat.gov.in", "Revenue Department":"https://digitalgujarat.gov.in",
+    "Employment Exchange":"https://digitalgujarat.gov.in", "State Police":"https://gujaratpolice.gov.in",
+    "State Tax / Commercial Taxes":"https://commercialtax.gujarat.gov.in" }},
+  "Haryana": { code:"HR", portal:"https://haryana.gov.in", overrides:{
+    "Land Records":"https://jamabandi.nic.in", "State Police":"https://haryanapolice.gov.in", "Revenue Department":"https://saralharyana.gov.in" }},
+  "Himachal Pradesh": { code:"HP", portal:"https://himachal.nic.in", overrides:{
+    "Land Records":"https://himbhoomi.nic.in", "State Police":"https://citizen.hppolice.gov.in" }},
+  "Jharkhand": { code:"JH", portal:"https://jharkhand.gov.in", overrides:{
+    "Land Records":"https://jharbhoomi.jharkhand.gov.in", "State Police":"https://jhpolice.gov.in" }},
+  "Karnataka": { code:"KA", portal:"https://karnataka.gov.in", overrides:{
+    "Land Records":"https://landrecords.karnataka.gov.in", "Property Registration":"https://kaverionline.karnataka.gov.in",
+    "Birth & Death Certificates":"https://nadakacheri.karnataka.gov.in", "Revenue Department":"https://sevasindhu.karnataka.gov.in",
+    "Electricity Board":"https://bescom.karnataka.gov.in", "Water Board":"https://bwssb.karnataka.gov.in",
+    "State Police":"https://ksp.karnataka.gov.in", "Employment Exchange":"https://sevasindhu.karnataka.gov.in",
+    "State Tax / Commercial Taxes":"https://ctax.kar.nic.in" }},
+  "Kerala": { code:"KL", portal:"https://kerala.gov.in", overrides:{
+    "Land Records":"https://erekha.kerala.gov.in", "Birth & Death Certificates":"https://edistrict.kerala.gov.in",
+    "State Police":"https://keralapolice.gov.in", "Revenue Department":"https://edistrict.kerala.gov.in" }},
+  "Madhya Pradesh": { code:"MP", portal:"https://mp.gov.in", overrides:{
+    "Land Records":"https://mpbhulekh.gov.in", "Birth & Death Certificates":"https://mpedistrict.gov.in",
+    "State Police":"https://mppolice.gov.in", "Revenue Department":"https://mpedistrict.gov.in" }},
+  "Maharashtra": { code:"MH", portal:"https://maharashtra.gov.in", overrides:{
+    "Land Records":"https://bhulekh.mahabhumi.gov.in", "Property Registration":"https://igrmaharashtra.gov.in",
+    "Birth & Death Certificates":"https://aaplesarkar.mahaonline.gov.in", "Revenue Department":"https://aaplesarkar.mahaonline.gov.in",
+    "State Police":"https://mahapolice.gov.in", "Employment Exchange":"https://rojgar.mahaswayam.gov.in" }},
+  "Manipur": { code:"MN", portal:"https://manipur.gov.in", overrides:{ "State Police":"https://manipurpolice.gov.in" }},
+  "Meghalaya": { code:"ML", portal:"https://meghalaya.gov.in", overrides:{} },
+  "Mizoram": { code:"MZ", portal:"https://mizoram.gov.in", overrides:{} },
+  "Nagaland": { code:"NL", portal:"https://nagaland.gov.in", overrides:{} },
+  "Odisha": { code:"OD", portal:"https://odisha.gov.in", overrides:{
+    "Land Records":"https://bhulekh.ori.nic.in", "Birth & Death Certificates":"https://edistrict.odisha.gov.in",
+    "State Police":"https://odishapolice.gov.in", "Revenue Department":"https://edistrict.odisha.gov.in" }},
+  "Punjab": { code:"PB", portal:"https://punjab.gov.in", overrides:{
+    "Land Records":"https://jamabandi.punjab.gov.in", "Birth & Death Certificates":"https://connect.punjab.gov.in",
+    "State Police":"https://punjabpolice.gov.in", "Revenue Department":"https://connect.punjab.gov.in" }},
+  "Rajasthan": { code:"RJ", portal:"https://rajasthan.gov.in", overrides:{
+    "Land Records":"https://apnakhata.rajasthan.gov.in", "Birth & Death Certificates":"https://emitra.rajasthan.gov.in",
+    "State Police":"https://police.rajasthan.gov.in", "Revenue Department":"https://emitra.rajasthan.gov.in" }},
+  "Sikkim": { code:"SK", portal:"https://sikkim.gov.in", overrides:{ "State Police":"https://sikkimpolice.nic.in" }},
+  "Tamil Nadu": { code:"TN", portal:"https://www.tn.gov.in", overrides:{
+    "Land Records":"https://eservices.tn.gov.in", "Property Registration":"https://tnreginet.gov.in",
+    "Birth & Death Certificates":"https://tnesevai.tn.gov.in", "Revenue Department":"https://tnesevai.tn.gov.in",
+    "State Police":"https://eservices.tnpolice.gov.in", "Employment Exchange":"https://tnvelaivaaippu.gov.in" }},
+  "Telangana": { code:"TS", portal:"https://telangana.gov.in", overrides:{
+    "Land Records":"https://dharani.telangana.gov.in", "Birth & Death Certificates":"https://meeseva.telangana.gov.in",
+    "State Police":"https://www.tspolice.gov.in", "Revenue Department":"https://meeseva.telangana.gov.in" }},
+  "Tripura": { code:"TR", portal:"https://tripura.gov.in", overrides:{ "State Police":"https://tripurapolice.gov.in" }},
+  "Uttar Pradesh": { code:"UP", portal:"https://up.gov.in", overrides:{
+    "Land Records":"https://upbhulekh.gov.in", "Property Registration":"https://igrsup.gov.in",
+    "Birth & Death Certificates":"https://edistrict.up.gov.in", "Revenue Department":"https://edistrict.up.gov.in",
+    "State Police":"https://uppolice.gov.in", "Employment Exchange":"https://sewayojan.up.nic.in" }},
+  "Uttarakhand": { code:"UK", portal:"https://uk.gov.in", overrides:{
+    "Land Records":"https://devbhoomi.uk.gov.in", "State Police":"https://uttarakhandpolice.uk.gov.in" }},
+  "West Bengal": { code:"WB", portal:"https://wb.gov.in", overrides:{
+    "Land Records":"https://banglarbhumi.gov.in", "Birth & Death Certificates":"https://wbedistrict.gov.in",
+    "State Police":"https://wbpolice.gov.in", "Revenue Department":"https://wbedistrict.gov.in" }},
+  "Andaman and Nicobar Islands": { code:"AN", portal:"https://andaman.gov.in", overrides:{} },
+  "Chandigarh": { code:"CH", portal:"https://chandigarh.gov.in", overrides:{ "State Police":"https://chandigarhpolice.gov.in" }},
+  "Dadra and Nagar Haveli and Daman and Diu": { code:"ND", portal:"https://ddd.gov.in", overrides:{} },
+  "Delhi": { code:"DL", portal:"https://delhi.gov.in", overrides:{
+    "Land Records":"https://dlrc.delhi.gov.in", "Birth & Death Certificates":"https://edistrict.delhigovt.nic.in",
+    "Revenue Department":"https://edistrict.delhigovt.nic.in", "State Police":"https://delhipolice.gov.in",
+    "Electricity Board":"https://www.bsesdelhi.com", "Water Board":"https://delhijalboard.delhi.gov.in" }},
+  "Jammu and Kashmir": { code:"JK", portal:"https://jk.gov.in", overrides:{ "State Police":"https://jkpolice.gov.in" }},
+  "Ladakh": { code:"LA", portal:"https://ladakh.gov.in", overrides:{} },
+  "Lakshadweep": { code:"LD", portal:"https://lakshadweep.gov.in", overrides:{} },
+  "Puducherry": { code:"PY", portal:"https://py.gov.in", overrides:{ "State Police":"https://pypolice.gov.in" }},
+};
+
+const STATES = Object.keys(STATE_DATA).sort().map(name => {
+  const d = STATE_DATA[name];
+  const links = TOPIC_LABELS.map(label => ({ label, url: d.overrides[label] || IGOD(d.code) }));
+  return { name, portal:d.portal, links };
+});
+
+/*  RENDER: categories                                                    */
+
+function renderCategories(){
+  const grid = document.getElementById("categoryGrid");
+  grid.innerHTML = CATEGORIES.map((cat, i) => `
+    <div class="cat-card${i===0?' open':''}" id="cat-${cat.key}">
+      <button class="cat-head" onclick="toggleCat('${cat.key}')" aria-expanded="${i===0}">
+        <span class="cat-head-left">
+          <span class="cat-icon">${svg(cat.icon, 21)}</span>
+          <span>
+            <p class="cat-title">${cat.title}</p>
+            <p class="cat-desc">${cat.desc}</p>
+          </span>
+        </span>
+        <span class="chev">${svg('chevronDown', 18)}</span>
+      </button>
+      <div class="cat-body">
+        ${cat.items.map(it => `
+          <div class="svc-row">
+            <div>
+              <p class="svc-name">${it.name}</p>
+              <p class="svc-site">${it.site}</p>
+            </div>
+            <a class="svc-btn" href="${it.url}" target="_blank" rel="noreferrer">Open Official Website ${svg('externalLink', 12)}</a>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  `).join("");
+}
+function toggleCat(key){
+  document.getElementById(`cat-${key}`).classList.toggle("open");
+}
+
+function renderQuickAccess(){
+  document.getElementById("quickAccessGrid").innerHTML = QUICK_ACCESS.map(q => `
+    <a class="qa-card" href="${q.url}" target="_blank" rel="noreferrer">
+      ${q.label} ${svg('arrowRight', 16)}
+    </a>
+  `).join("");
+}
+
+function renderChips(){
+  document.getElementById("popularChips").innerHTML = POPULAR.map(p => `
+    <button class="chip" onclick="popularPick('${p.replace(/'/g,"\\'")}')">${p}</button>
+  `).join("");
+}
+function popularPick(term){
+  const hero = document.getElementById("heroSearchInput");
+  hero.value = term;
+  onHeroSearch(term);
+  hero.focus();
+}
+
+/*  RENDER: states                                                        */
+
+function renderStates(query){
+  query = (query || "").trim().toLowerCase();
+  const filtered = STATES.filter(s => s.name.toLowerCase().includes(query));
+  const grid = document.getElementById("stateGrid");
+  if (filtered.length === 0){
+    grid.innerHTML = `<div class="no-states">No states match "${query}".</div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(s => `
+    <div class="state-card" id="state-${s.code||s.name.replace(/\s+/g,'')}">
+      <button class="state-head" onclick="toggleState('${s.name.replace(/'/g,"\\'")}')" aria-expanded="false">
+        <span class="state-head-left">
+          <span class="state-avatar">${s.name.slice(0,2).toUpperCase()}</span>
+          <span class="state-name">${s.name}</span>
+        </span>
+        <span class="chev">${svg('chevronDown', 18)}</span>
+      </button>
+      <div class="state-body">
+        ${s.links.map(l => `<a href="${l.url}" target="_blank" rel="noreferrer">${svg('chevronRight',13)} ${l.label}</a>`).join("")}
+      </div>
+    </div>
+  `).join("");
+}
+function toggleState(name){
+  const card = document.getElementById(`state-${name.replace(/\s+/g,'')}`);
+  if (card) card.classList.toggle("open");
+}
+
+/*  SEARCH                                                                 */
+
+function onHeroSearch(q){
+  // keep both search inputs in sync
+  document.getElementById("heroSearchInput").value = q;
+  document.getElementById("navSearchInput").value = q;
+
+  const box = document.getElementById("searchResults");
+  const query = q.trim().toLowerCase();
+  if (!query){ box.classList.remove("show"); box.innerHTML=""; return; }
+
+  const svcMatches = [];
+  CATEGORIES.forEach(cat => cat.items.forEach(it => {
+    if (it.name.toLowerCase().includes(query) || it.site.toLowerCase().includes(query)){
+      svcMatches.push({ type:"Service", name: it.name, sub: it.site, url: it.url });
+    }
+  }));
+  const stateMatches = STATES.filter(s => s.name.toLowerCase().includes(query))
+    .map(s => ({ type:"State", name: s.name, sub:"State / union territory services", stateName: s.name }));
+
+  const results = [...svcMatches, ...stateMatches].slice(0, 8);
+
+  if (results.length === 0){
+    box.innerHTML = `<div class="sr-empty">No matches for "${q}". Try a shorter term, like "passport" or "GST".</div>`;
+  } else {
+    box.innerHTML = results.map((r,i) => `
+      <button class="sr-item" onclick='handlePick(${i})'>
+        <span><span class="name">${r.name}</span><span class="sub">${r.sub}</span></span>
+        <span class="sr-badge ${r.type==='State'?'state':'service'}">${r.type}</span>
+      </button>
+    `).join("");
+    window.__searchResults = results;
+  }
+  box.classList.add("show");
+}
+function handlePick(i){
+  const r = window.__searchResults[i];
+  if (!r) return;
+  if (r.type === "State"){
+    showView("states");
+    document.getElementById("stateSearchInput").value = "";
+    renderStates("");
+    setTimeout(() => {
+      toggleState(r.stateName);
+      const el = document.getElementById(`state-${r.stateName.replace(/\s+/g,'')}`);
+      if (el) el.scrollIntoView({behavior:"smooth", block:"center"});
+    }, 30);
+  } else if (r.url) {
+    window.open(r.url, "_blank", "noreferrer");
+  }
+  clearSearch();
+}
+function clearSearch(){
+  document.getElementById("heroSearchInput").value = "";
+  document.getElementById("navSearchInput").value = "";
+  document.getElementById("searchResults").classList.remove("show");
+}
+document.addEventListener("click", (e) => {
+  const shell = document.querySelector(".search-shell");
+  if (shell && !shell.contains(e.target)) document.getElementById("searchResults").classList.remove("show");
+});
+
+/*  VIEW SWITCHING + MOBILE NAV                                           */
+
+function showView(view){
+  const home = document.getElementById("home-view");
+  const states = document.getElementById("states-view");
+  if (view === "states"){
+    home.classList.add("hide");
+    states.classList.add("show");
+    if (!states.dataset.rendered){ renderStates(""); states.dataset.rendered = "1"; }
+    window.scrollTo({top:0, behavior:"instant"});
+  } else {
+    home.classList.remove("hide");
+    states.classList.remove("show");
+    window.scrollTo({top:0, behavior:"instant"});
+  }
+}
+function toggleMobileNav(){
+  const nav = document.getElementById("mobileNav");
+  const btn = document.getElementById("burgerBtn");
+  const open = nav.classList.toggle("open");
+  btn.setAttribute("aria-expanded", open ? "true" : "false");
+}
+
+/*  INIT                                                                   */
+
+renderCategories();
+renderQuickAccess();
+renderChips();
+</script>
+</body>
+</html>
